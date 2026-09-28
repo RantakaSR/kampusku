@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1FC8FF">
+<title>KampusKu — Teman kuliahmu</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("tema")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch{}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--hl:#1FC8FF;--hl-soft:#D6F4FF;--ink:#0A1F44;--mut:#5B6B85;--bg:#F5FBFF;--card:#fff;--on:#0A1F44;--mk:#1FC8FF;--line:#D9E6F2;--red:#E5484D;--grn:#12A26B;--r:14px}
+:root[data-theme=dark]{--ink:#E8F1FF;--mut:#93A4C0;--bg:#0B1220;--card:#131C2E;--line:#25334D;--hl-soft:#12384A;--mk:#1FC8FF66;--red:#FF7B80;--grn:#3DD68C}
+:root[data-theme=dark] .tag.late{background:#4A1D22}
+*{box-sizing:border-box;margin:0}
+body{font:16px/1.5 Figtree,system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh}
+h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.mark{background:linear-gradient(transparent 55%,var(--mk) 55%);padding:0 .15em}
+.btn{background:var(--hl);color:var(--on);border:2px solid var(--ink);border-radius:10px;padding:.5rem 1rem;font-weight:600;box-shadow:2px 2px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink)}.btn.sm{padding:.25rem .6rem;font-size:.85rem}
+.btn.del{background:var(--card);color:var(--red);border-color:var(--red);box-shadow:none}
+input,select,textarea{width:100%;padding:.6rem .75rem;border:2px solid var(--line);border-radius:10px;background:var(--card)}
+input:focus,select:focus,textarea:focus{border-color:var(--hl);outline:none}
+label{display:block;font-size:.85rem;font-weight:600;margin:.8rem 0 .25rem}
+/* auth */
+#auth{min-height:100vh;display:grid;place-items:center;padding:1.2rem;background:var(--hl)}
+.auth-box{background:var(--card);border:2px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:1.6rem;width:100%;max-width:400px}
+.auth-box h1{font-size:2rem;margin-bottom:.3rem}
+.auth-box p{color:var(--mut)}
+.auth-box .btn{width:100%;margin-top:1.2rem;padding:.7rem}
+.link{background:none;border:0;color:var(--ink);text-decoration:underline;margin-top:1rem;width:100%}
+.msg{color:var(--red);font-size:.9rem;margin-top:.6rem;min-height:1.2em}
+/* app shell */
+#app{display:none;min-height:100vh}
+nav{position:fixed;z-index:5;background:var(--card);border-top:2px solid var(--ink);bottom:0;left:0;right:0;display:flex;padding-bottom:env(safe-area-inset-bottom,0)}
+nav .brand,nav .out,nav .tema{display:none}
+nav button{flex:1;background:none;border:0;padding:.8rem .2rem;font-size:.78rem;font-weight:600;color:var(--mut)}
+nav button.on{color:var(--ink);background:linear-gradient(var(--hl-soft),var(--hl-soft)) no-repeat top/100% 5px}
+main{padding:1rem 1rem 6rem;max-width:920px;margin:0 auto}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:.3rem 0 1rem}
+header.top h2{font-size:1.7rem}
+.grid{display:grid;gap:.8rem}
+.two{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:.9rem 1rem}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.item h3{font-size:1.05rem}.item small{color:var(--mut)}
+.acts{display:flex;gap:.4rem;flex-shrink:0}
+.tag{display:inline-block;background:var(--hl-soft);border-radius:6px;padding:0 .45rem;font-size:.8rem;font-weight:600}
+.tag.late{background:#FFE1E2;color:var(--red)}
+.done h3{text-decoration:line-through;color:var(--mut)}
+.saldo{background:var(--hl);color:var(--on);text-align:left}
+.saldo b{font-family:'Bricolage Grotesque';font-size:2.2rem;display:block}
+.plus{color:var(--grn);font-weight:700}.minus{color:var(--red);font-weight:700}
+.empty{color:var(--mut);padding:1.2rem;text-align:center;border:2px dashed var(--line);border-radius:var(--r)}
+.banner{background:#FFF3B0;color:#0A1F44;border:2px solid var(--ink);border-radius:var(--r);padding:.7rem 1rem;margin-bottom:1rem;font-weight:500}
+.chips{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.6rem;margin-bottom:.4rem}
+.chip{white-space:nowrap;background:var(--card);border:2px solid var(--ink);border-radius:99px;padding:.2rem .8rem;font-weight:600}
+.chip.on{background:var(--hl);color:var(--on)}
+.hari{margin:1rem 0 .4rem;font-size:1.1rem}
+.saldo small{color:var(--on)}
+.bar{display:grid;grid-template-columns:70px 1fr auto;gap:.5rem;align-items:center;margin:.4rem 0;font-size:.85rem}
+.bar i{display:block;height:14px;background:var(--hl);border:2px solid var(--ink);border-radius:6px;min-width:3px}
+.bar b{font-weight:600}
+/* modal */
+#modal{position:fixed;inset:0;background:#0A1F4488;display:none;align-items:flex-end;justify-content:center;z-index:10}
+#modal.open{display:flex}
+.sheet{background:var(--card);border:2px solid var(--ink);border-radius:20px 20px 0 0;padding:1.2rem;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.row2{display:flex;gap:.6rem;margin-top:1.2rem}.row2 .btn{flex:1}
+@media(min-width:800px){
+ body{padding-left:230px}
+ nav{top:0;bottom:auto;right:auto;width:230px;height:100vh;flex-direction:column;border-top:0;border-right:2px solid var(--ink);padding:1.2rem .8rem}
+ nav .brand{display:block;font:800 1.6rem 'Bricolage Grotesque';margin-bottom:1.2rem;padding-left:.5rem}
+ nav button{flex:none;text-align:left;font-size:1rem;padding:.65rem .8rem;border-radius:10px;background:none!important}
+ nav button.on{background:var(--hl)!important;color:var(--on)}
+ nav .out,nav .tema{display:block}nav .tema{margin-top:auto}nav .out{color:var(--red)}
+ main{padding:1.6rem 2rem}
+ #modal{align-items:center}.sheet{border-radius:20px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="auth">
+ <form class="auth-box" id="authForm">
+  <h1><span class="mark">KampusKu</span></h1>
+  <p id="authSub">Masuk untuk membuka jadwal, tugas, dan catatanmu.</p>
+  <div id="namaWrap" hidden><label for="nama">Nama</label><input id="nama" autocomplete="name"></div>
+  <label for="email">Email</label><input id="email" type="email" autocomplete="email" required>
+  <label for="pw">Kata sandi</label><input id="pw" type="password" autocomplete="current-password" required>
+  <div class="msg" id="authMsg" role="alert"></div>
+  <button class="btn" id="authBtn">Masuk</button>
+  <button type="button" class="link" id="authSwitch">Belum punya akun? Daftar</button>
+ </form>
+</section>
+
+<div id="app">
+ <nav id="nav">
+  <div class="brand"><span class="mark">KampusKu</span></div>
+  <button data-t="beranda">Beranda</button><button data-t="jadwal">Jadwal</button>
+  <button data-t="tugas">Tugas</button><button data-t="uang">Uang</button><button data-t="catatan">Catatan</button>
+  <button class="tema" onclick="toggleTheme()">Mode gelap / terang</button>
+  <button class="out" id="logout">Keluar</button>
+ </nav>
+ <main id="main"></main>
+</div>
+
+<div id="modal"><form class="sheet" id="sheet"></form></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const HARI=["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+const rp=n=>"Rp"+Number(n||0).toLocaleString("id-ID");
+const KAT=["Makan","Transport","Kuliah","Hiburan","Lainnya"];
+const KINDS=["jadwal","tugas","uang","catatan","folder"];
+let S={user:"",d:{},tab:"beranda",folder:"Semua",mode:"login"};
+
+async function api(url,m="GET",b){
+  const r=await fetch(url,{method:m,headers:{"Content-Type":"application/json"},body:b?JSON.stringify(b):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw Object.assign(new Error(j.error||"Terjadi kesalahan"),{status:r.status});
+  return j;
+}
+
+/* ---------- Login / daftar ---------- */
+function setMode(m){
+  S.mode=m;const reg=m==="register";
+  $("#namaWrap").hidden=!reg;$("#authBtn").textContent=reg?"Buat akun":"Masuk";
+  $("#authSwitch").textContent=reg?"Sudah punya akun? Masuk":"Belum punya akun? Daftar";
+  $("#authSub").textContent=reg?"Buat akun gratis untuk mulai mengatur kuliahmu.":"Masuk untuk membuka jadwal, tugas, dan catatanmu.";
+  $("#authMsg").textContent="";
+}
+$("#authSwitch").onclick=()=>setMode(S.mode==="login"?"register":"login");
+$("#authForm").onsubmit=async e=>{
+  e.preventDefault();
+  try{
+    const b={email:$("#email").value,pw:$("#pw").value};
+    if(S.mode==="register")b.nama=$("#nama").value;
+    const r=await api("/api/"+S.mode,"POST",b);
+    S.user=r.nama;await start();
+  }catch(x){$("#authMsg").textContent=x.message}
+};
+$("#logout").onclick=async()=>{await api("/api/logout","POST");location.reload()};
+
+async function start(){
+  await Promise.all(KINDS.map(async k=>S.d[k]=await api("/api/"+k)));
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js").catch(()=>{});
+  $("#auth").style.display="none";$("#app").style.display="block";render();cek();
+}
+(async()=>{try{const r=await api("/api/me");S.user=r.nama;await start()}catch{}})();
+
+$("#nav").onclick=e=>{const t=e.target.dataset.t;if(t){S.tab=t;render();scrollTo(0,0)}};
+
+/* ---------- Form tambah / ubah ---------- */
+const FIELDS={
+ jadwal:[["mata","Mata kuliah"],["hari","Hari","select",HARI],["mulai","Mulai","time"],["selesai","Selesai","time"],["ruang","Ruang / dosen"]],
+ tugas:[["judul","Judul tugas"],["matkul","Mata kuliah"],["tenggat","Tenggat","datetime-local"]],
+ uang:[["tipe","Jenis","select",["Pemasukan","Pengeluaran"]],["kat","Kategori","select",KAT],["ket","Keterangan"],["jumlah","Jumlah (Rp)","number"],["tgl","Tanggal","date"]],
+ catatan:[["folder","Folder","select","folders"],["judul","Judul"],["isi","Isi catatan","textarea"]],
+ folder:[["nama","Nama folder"]]
+};
+const TITLE={jadwal:"jadwal",tugas:"tugas",uang:"transaksi",catatan:"catatan",folder:"folder"};
+
+function openForm(kind,item={}){
+  const today=new Date().toISOString().slice(0,10);
+  let h=`<h2>${item.id?"Ubah":"Tambah"} ${TITLE[kind]}</h2>`;
+  FIELDS[kind].forEach(([k,lab,type="text",opt])=>{
+    let v=item[k]??(k==="tgl"?today:k==="folder"&&kind==="catatan"&&S.folder!=="Semua"?S.folder:"");
+    h+=`<label for="f_${k}">${lab}</label>`;
+    if(type==="select"){
+      const o=opt==="folders"?["Tanpa folder",...S.d.folder.map(f=>f.nama)]:opt;
+      h+=`<select id="f_${k}">${o.map(x=>`<option ${x===v?"selected":""}>${esc(x)}</option>`).join("")}</select>`;
+    }else if(type==="textarea")h+=`<textarea id="f_${k}" rows="7">${esc(v)}</textarea>`;
+    else h+=`<input id="f_${k}" type="${type}" value="${esc(v)}" ${type==="number"?'min="0"':""} required>`;
+  });
+  h+=`<div class="row2"><button type="button" class="btn ghost" onclick="closeForm()">Batal</button><button class="btn">Simpan</button></div>`;
+  $("#sheet").innerHTML=h;$("#modal").classList.add("open");
+  $("#sheet").onsubmit=async e=>{
+    e.preventDefault();
+    const d={};FIELDS[kind].forEach(([k])=>d[k]=$("#f_"+k).value);
+    if(kind==="tugas")d.selesai=!!item.selesai;
+    if(kind==="uang")d.jumlah=+d.jumlah;
+    await save(kind,d,item.id);closeForm();
+  };
+}
+function closeForm(){$("#modal").classList.remove("open")}
+$("#modal").onclick=e=>{if(e.target.id==="modal")closeForm()};
+async function save(kind,d,id){
+  if(id){const r=await api(`/api/${kind}/${id}`,"PUT",d);S.d[kind]=S.d[kind].map(x=>x.id===id?r:x)}
+  else S.d[kind].push(await api("/api/"+kind,"POST",d));
+  render();
+}
+async function del(kind,id){
+  if(!confirm("Hapus data ini?"))return;
+  if(kind==="folder"){
+    const f=S.d.folder.find(x=>x.id===id);
+    for(const n of S.d.catatan.filter(c=>c.folder===f.nama)){await api("/api/catatan/"+n.id,"DELETE")}
+    S.d.catatan=S.d.catatan.filter(c=>c.folder!==f.nama);S.folder="Semua";
+  }
+  await api(`/api/${kind}/${id}`,"DELETE");S.d[kind]=S.d[kind].filter(x=>x.id!==id);render();
+}
+const find=(k,id)=>S.d[k].find(x=>x.id===id);
+const acts=(k,id)=>`<div class="acts"><button class="btn sm ghost" onclick="openForm('${k}',find('${k}',${id}))">Ubah</button><button class="btn sm del" onclick="del('${k}',${id})">Hapus</button></div>`;
+async function toggle(id){const t=find("tugas",id);await save("tugas",{...t,selesai:!t.selesai},id)}
+
+/* ---------- Tampilan ---------- */
+const fmtTgl=s=>s?new Date(s).toLocaleString("id-ID",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+const saldo=()=>S.d.uang.reduce((a,x)=>a+(x.tipe==="Pemasukan"?x.jumlah:-x.jumlah),0);
+const head=(t,kind)=>`<header class="top"><h2><span class="mark">${t}</span></h2>${kind?`<button class="btn" onclick="openForm('${kind}')">+ Tambah</button>`:""}</header>`;
+const empty=t=>`<div class="empty">${t}</div>`;
+
+function jadwalItem(j){return `<div class="card item"><div><h3>${esc(j.mata)}</h3><small>${esc(j.mulai)}–${esc(j.selesai)} · ${esc(j.ruang)}</small></div>${acts("jadwal",j.id)}</div>`}
+function tugasItem(t){
+  const late=!t.selesai&&new Date(t.tenggat)<new Date();
+  return `<div class="card item ${t.selesai?"done":""}"><div><h3>${esc(t.judul)}</h3><small>${esc(t.matkul)}</small><br><span class="tag ${late?"late":""}">${late?"Terlambat · ":""}${fmtTgl(t.tenggat)}</span></div>
+  <div class="acts"><button class="btn sm" onclick="toggle(${t.id})">${t.selesai?"Buka lagi":"Selesai"}</button>${acts("tugas",t.id)}</div></div>`;
+}
+
+const V={
+ beranda(){
+  const hariIni=HARI[(new Date().getDay()+6)%7];
+  const jd=S.d.jadwal.filter(j=>j.hari===hariIni).sort((a,b)=>a.mulai.localeCompare(b.mulai));
+  const tg=S.d.tugas.filter(t=>!t.selesai).sort((a,b)=>a.tenggat.localeCompare(b.tenggat));
+  const dekat=tg.filter(t=>new Date(t.tenggat)-new Date()<864e5*2);
+  return `<header class="top"><h2>Halo, <span class="mark">${esc(S.user)}</span></h2><button class="btn sm ghost" onclick="toggleTheme()">Tema</button></header>
+  ${notifCard()}${dekat.length?`<div class="banner">Pengingat: ${dekat.length} tugas jatuh tempo dalam 2 hari — ${esc(dekat[0].judul)}${dekat.length>1?" dan lainnya":""}.</div>`:""}
+  <div class="grid two">
+   <div class="card saldo"><small>Saldo saat ini</small><b>${rp(saldo())}</b></div>
+   <div class="card"><small>Tugas belum selesai</small><h2 style="font-size:2.2rem">${tg.length}</h2></div>
+  </div>
+  <h3 class="hari">Kuliah hari ini (${hariIni})</h3>
+  <div class="grid">${jd.map(jadwalItem).join("")||empty("Tidak ada kuliah hari ini.")}</div>
+  <h3 class="hari">Tugas terdekat</h3>
+  <div class="grid">${tg.slice(0,3).map(tugasItem).join("")||empty("Semua tugas beres. Mantap!")}</div>`;
+ },
+ jadwal(){
+  const by=HARI.map(h=>[h,S.d.jadwal.filter(j=>j.hari===h).sort((a,b)=>a.mulai.localeCompare(b.mulai))]).filter(x=>x[1].length);
+  return head("Jadwal","jadwal")+(by.map(([h,l])=>`<h3 class="hari">${h}</h3><div class="grid">${l.map(jadwalItem).join("")}</div>`).join("")||empty("Belum ada jadwal. Tambahkan mata kuliah pertamamu."));
+ },
+ tugas(){
+  const l=[...S.d.tugas].sort((a,b)=>(a.selesai-b.selesai)||a.tenggat.localeCompare(b.tenggat));
+  return head("Tugas","tugas")+`<div class="grid">${l.map(tugasItem).join("")||empty("Belum ada tugas. Catat tenggat supaya tidak terlewat.")}</div>`;
+ },
+ uang(){
+  const m=S.d.uang.filter(x=>x.tipe==="Pemasukan").reduce((a,x)=>a+x.jumlah,0),k=S.d.uang.filter(x=>x.tipe!=="Pemasukan").reduce((a,x)=>a+x.jumlah,0);
+  const l=[...S.d.uang].sort((a,b)=>b.tgl.localeCompare(a.tgl));
+  return head("Keuangan","uang")+`<div class="grid two"><div class="card saldo"><small>Saldo</small><b>${rp(m-k)}</b></div>
+  <div class="card"><small>Masuk</small> <span class="plus">${rp(m)}</span><br><small>Keluar</small> <span class="minus">${rp(k)}</span></div></div>
+  ${charts()}<h3 class="hari">Riwayat</h3><div class="grid">${l.map(x=>`<div class="card item"><div><h3>${esc(x.ket)}</h3><small>${esc(x.tgl)}</small><br>
+  <span class="${x.tipe==="Pemasukan"?"plus":"minus"}">${x.tipe==="Pemasukan"?"+":"−"}${rp(x.jumlah)}</span></div>${acts("uang",x.id)}</div>`).join("")||empty("Belum ada transaksi.")}</div>`;
+ },
+ catatan(){
+  const fs=["Semua",...S.d.folder.map(f=>f.nama)];
+  const l=S.d.catatan.filter(n=>S.folder==="Semua"||n.folder===S.folder);
+  const fo=S.d.folder.find(f=>f.nama===S.folder);
+  return head("Catatan","catatan")+`<div class="chips">${fs.map(f=>`<button class="chip ${f===S.folder?"on":""}" onclick="S.folder='${esc(f).replace(/'/g,"\\'")}';render()">${esc(f)}</button>`).join("")}
+  <button class="chip" onclick="openForm('folder')">+ Folder</button></div>
+  ${fo?`<p style="margin-bottom:.6rem"><button class="btn sm ghost" onclick="openForm('folder',find('folder',${fo.id}))">Ganti nama folder</button> <button class="btn sm del" onclick="del('folder',${fo.id})">Hapus folder</button></p>`:""}
+  <div class="grid two">${l.map(n=>`<div class="card"><div class="item"><div><h3>${esc(n.judul)}</h3><small>${esc(n.folder)}</small></div>${acts("catatan",n.id)}</div>
+  <p style="margin-top:.5rem;white-space:pre-wrap;color:var(--mut)">${esc(n.isi.slice(0,180))}${n.isi.length>180?"…":""}</p></div>`).join("")||empty("Folder ini masih kosong. Tulis catatan kuliahmu.")}</div>`;
+ }
+};
+/* ---------- Tema ---------- */
+function toggleTheme(){const t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;try{localStorage.setItem("tema",t)}catch{}}
+
+/* ---------- Grafik ---------- */
+function bars(rows){const mx=Math.max(1,...rows.map(r=>r[1]));return rows.map(([l,v])=>`<div class="bar"><span>${esc(l)}</span><i style="width:${v/mx*100}%"></i><b>${rp(v)}</b></div>`).join("")}
+function charts(){
+  const out=S.d.uang.filter(x=>x.tipe!=="Pemasukan");
+  if(!out.length)return "";
+  const kat=KAT.map(k=>[k,out.filter(x=>(x.kat||"Lainnya")===k).reduce((a,x)=>a+x.jumlah,0)]).filter(r=>r[1]);
+  const now=new Date(),bl=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1),key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    bl.push([d.toLocaleString("id-ID",{month:"short"}),out.filter(x=>(x.tgl||"").startsWith(key)).reduce((a,x)=>a+x.jumlah,0)]);
+  }
+  return `<div class="grid two" style="margin-top:.8rem"><div class="card"><h3>Pengeluaran per kategori</h3>${bars(kat)}</div><div class="card"><h3>Pengeluaran 6 bulan</h3>${bars(bl)}</div></div>`;
+}
+
+/* ---------- Notifikasi ---------- */
+function notifCard(){
+  if(!("Notification" in window))return "";
+  if(Notification.permission==="default")return `<div class="banner" style="background:var(--hl-soft);color:var(--ink)">Aktifkan notifikasi agar tugas dan kuliah diingatkan. <button class="btn sm" onclick="askNotif()">Aktifkan</button></div>`;
+  if(Notification.permission==="denied")return `<div class="banner" style="background:var(--hl-soft);color:var(--ink)">Notifikasi diblokir. Izinkan lewat pengaturan situs di browser.</div>`;
+  return "";
+}
+async function askNotif(){const p=await Notification.requestPermission();render();if(p==="granted")notify("Notifikasi aktif","Kamu akan diingatkan soal tugas dan kuliah.","ok")}
+function notify(t,b,tag){
+  const o={body:b,tag};
+  if("serviceWorker" in navigator)navigator.serviceWorker.ready.then(r=>r.showNotification(t,o)).catch(()=>{try{new Notification(t,o)}catch{}});
+  else try{new Notification(t,o)}catch{}
+}
+function seen(k){try{const a=JSON.parse(localStorage.getItem("notif")||"[]");if(a.includes(k))return true;a.push(k);localStorage.setItem("notif",JSON.stringify(a.slice(-300)))}catch{}return false}
+function cek(){
+  if(!("Notification" in window)||Notification.permission!=="granted")return;
+  const now=new Date();
+  S.d.tugas.filter(t=>!t.selesai&&t.tenggat).forEach(t=>{
+    const m=(new Date(t.tenggat)-now)/6e4;
+    if(m>0&&m<=60){if(!seen("t"+t.id+"-1"))notify("Tenggat 1 jam lagi",t.judul,"t"+t.id)}
+    else if(m>60&&m<=1440){if(!seen("t"+t.id+"-24"))notify("Tenggat dalam 24 jam",`${t.judul} · ${fmtTgl(t.tenggat)}`,"t"+t.id)}
+  });
+  const hari=HARI[(now.getDay()+6)%7];
+  S.d.jadwal.filter(j=>j.hari===hari).forEach(j=>{
+    const [h,mn]=j.mulai.split(":"),m=(new Date(now.getFullYear(),now.getMonth(),now.getDate(),+h,+mn)-now)/6e4;
+    if(m>0&&m<=15&&!seen("j"+j.id+now.toDateString()))notify("Kuliah 15 menit lagi",`${j.mata} · ${j.ruang}`,"j"+j.id);
+  });
+}
+setInterval(cek,60000);
+function render(){
+  document.querySelectorAll("nav button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===S.tab));
+  $("#main").innerHTML=V[S.tab]();
+}
+// Ganti nama folder ikut memperbarui catatan
+const _save=save;
+save=async function(kind,d,id){
+  if(kind==="folder"&&id){
+    const lama=find("folder",id).nama;
+    if(lama!==d.nama)for(const n of S.d.catatan.filter(c=>c.folder===lama)){
+      const r=await api("/api/catatan/"+n.id,"PUT",{...n,folder:d.nama});S.d.catatan=S.d.catatan.map(x=>x.id===n.id?r:x);
+    }
+    if(S.folder===lama)S.folder=d.nama;
+  }
+  return _save(kind,d,id);
+};
+</script>
+</body>
+</html>
